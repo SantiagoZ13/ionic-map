@@ -1,0 +1,7 @@
+{
+  "name": "mapa-moviles",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
