@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import L from "leaflet";
+import L, { bounds } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Geolocation } from "@capacitor/geolocation";
 
@@ -19,10 +19,14 @@ export default function MapView() {
         const { latitude, longitude } = position.coords;
         const startPoint = L.latLng(latitude, longitude);
 
-        const map = L.map("map").setView(startPoint, 10);
+        const map = L.map("map", {
+          maxBoundsViscosity: 1.0,
+          minZoom: 3,
+        }).setView(startPoint, 10);
         mapRef.current = map;
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          noWrap: true,
           attribution: "© OpenStreetMap contributors",
         }).addTo(map);
 
@@ -56,7 +60,7 @@ export default function MapView() {
           map.panTo(newPoint);
 
           console.log(`Punto ${pointsRef.current.length} agregado:`, newPoint);
-        }, 0.1 * 60 * 1000); // 10 minutos
+        }, 5 * 60 * 1000); // 5 minutos
       } catch (error) {
         console.error("Error al obtener la ubicación:", error);
       }
